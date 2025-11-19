@@ -1,0 +1,64 @@
+import React from "react";
+import "./dashboard.css"; // Le style du dashboard (fourni plus bas)
+import { FaUsers, FaChalkboardTeacher, FaBook, FaMoneyBill } from "react-icons/fa";
+
+export default function DashboardAdmin() {
+  return (
+    <div className="dashboard-container">
+
+      {/* ----------- HEADER ----------- */}
+      <h1 className="dashboard-title">Tableau de bord Administrateur</h1>
+      <p className="dashboard-subtitle">Bienvenue dans SmartCampus - Administration</p>
+
+      {/* ----------- STAT CARDS ----------- */}
+      <div className="stats-grid">
+
+        <div className="stat-card">
+          <FaUsers className="stat-icon" />
+          <div>
+            <h3>1 245</h3>
+            <p>Étudiants inscrits</p>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <FaChalkboardTeacher className="stat-icon" />
+          <div>
+            <h3>48</h3>
+            <p>Formateurs actifs</p>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <FaBook className="stat-icon" />
+          <div>
+            <h3>32</h3>
+            <p>Formations disponibles</p>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <FaMoneyBill className="stat-icon" />
+          <div>
+            <h3>12.8M FCFA</h3>
+            <p>Paiements reçus</p>
+          </div>
+        </div>
+
+      </div>
+
+      {/* ----------- ACTIVITÉS ----------- */}
+      <div className="activities-section">
+        <h2>Activités récentes</h2>
+
+        <ul className="activities-list">
+          <li>✔ 15 nouveaux étudiants inscrits aujourd’hui</li>
+          <li>✔ Paiement de 150 000 FCFA par l’étudiant : NDI Samba</li>
+          <li>✔ Nouveau formateur ajouté : M. Ekoume</li>
+          <li>✔ Session "Dev Web" mise à jour (horaire modifié)</li>
+        </ul>
+      </div>
+
+    </div>
+  );
+}

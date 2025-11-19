@@ -1,0 +1,12 @@
+.layout {
+  display: flex;
+}
+
+.content-area {
+  margin-left: 260px; /* largeur de la sidebar */
+  width: calc(100% - 260px);
+}
+
+.page-content {
+  padding: 20px;
+}
