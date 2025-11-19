@@ -1,0 +1,78 @@
+.logout-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #6f42c1, #007bff, #20c997);
+  animation: gradientShift 10s infinite alternate;
+  color: #fff;
+}
+
+@keyframes gradientShift {
+  0% { background: linear-gradient(135deg, #6f42c1, #007bff); }
+  50% { background: linear-gradient(135deg, #007bff, #20c997); }
+  100% { background: linear-gradient(135deg, #20c997, #6f42c1); }
+}
+
+.logout-card {
+  background: rgba(255,255,255,0.1);
+  padding: 40px;
+  border-radius: 16px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.logout-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.logout-subtitle {
+  font-size: 18px;
+  margin-bottom: 25px;
+}
+
+.logout-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.btn-logout, .btn-dashboard, .btn-switch {
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.btn-logout {
+  background: #dc3545;
+  color: #fff;
+}
+
+.btn-dashboard {
+  background: #28a745;
+  color: #fff;
+}
+
+.btn-switch {
+  background: #6c757d;
+  color: #fff;
+}
+
+.btn-logout:hover, .btn-dashboard:hover, .btn-switch:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.logout-footer {
+  margin-top: 30px;
+  font-style: italic;
+  font-size: 16px;
+  color: #f8f9fa;
+}

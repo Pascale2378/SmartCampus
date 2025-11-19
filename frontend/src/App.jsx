@@ -12,7 +12,7 @@ import Pedagogique from "./pages/administrateur/Pedagogique";
 import Inventaires from "./pages/administrateur/Inventaires";
 import Systeme from "./pages/administrateur/Systeme";
 import Communication from "./pages/administrateur/Communication";
-import Logout from "./pages/administrateur/Logout";
+import Logout from "./pages/administrateur/Deconnexion";
 
 function App() {
   return (
