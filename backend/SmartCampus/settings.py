@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'SmartCampus.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'SmartCampus',
+        'NAME': 'SmartCampus_db',
         'USER': 'postgres',
-        'PASSWORD': 'Smart2025',
+        'PASSWORD': 'pascale237',
         'HOST': 'localhost',
         'PORT': '5432',
     }
