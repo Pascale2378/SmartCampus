@@ -1,66 +1,71 @@
-/* Sidebar container */
 .sidebar {
   width: 220px;
   height: 100vh;
-  background: #1e1e2f;   /* Bleu nuit sobre */
+  background: #1e1e2f;
   color: white;
-  padding: 20px;
   position: fixed;
   top: 0;
   left: 0;
+  padding: 20px;
+  overflow-y: auto;
 }
 
-/* Title */
 .sidebar-title {
   font-size: 22px;
   font-weight: bold;
   margin-bottom: 30px;
+  text-align: center;
+  color: #ffffff;
 }
 
-/* Menu list */
 .sidebar-menu {
   list-style: none;
   padding: 0;
 }
 
-/* Links */
 .sidebar-menu li {
-  margin-bottom: 18px;
+  margin: 10px 0;
 }
 
-.sidebar-menu a {
-  text-decoration: none;
-  color: #f5f5f5;
-  font-size: 16px;
-  transition: 0.3s ease;
-}
-
-.sidebar-menu a:hover {
-  color: rgb(224, 205, 224);
-  padding-left: 6px;
-}
-
-/* Logout style */
-.logout a {
-  color: #e71c1c;
-  font-weight: bold;
-}
-.logout a:hover {
-  color: red;
-}
-
-.sidebar-menu li a {
+.sidebar-menu a, .menu-btn {
   color: white;
   text-decoration: none;
-  font-size: 16px;
   display: flex;
   align-items: center;
-  gap: 10px; /* espace entre icône et texte */
-  padding: 10px;
+  gap: 10px;
+  padding: 8px 12px;
   border-radius: 6px;
-  transition: background 0.2s;
+  transition: background 0.3s;
+  width: 100%;
+  border: none;
+  background: none;
+  cursor: pointer;
 }
 
-.sidebar-menu li a:hover {
-  background: #334155;
+.sidebar-menu a:hover, .menu-btn:hover {
+  background: #00d4ff;
+  color: #1e1e2f;
+}
+
+.submenu {
+  list-style: none;
+  padding-left: 20px;
+  margin-top: 5px;
+}
+
+.submenu li {
+  margin: 6px 0;
+}
+
+.submenu a {
+  font-size: 14px;
+  color: #ddd;
+}
+
+.submenu a:hover {
+  color: #00d4ff;
+}
+
+.logout a {
+  color: #ff4d4d;
 }

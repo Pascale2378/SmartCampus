@@ -1,32 +1,46 @@
-.formateurs-wrapper {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 200px);
-  justify-content: space-between;
+/* En-tête de page */
+.page-header {
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #343a40;
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  font-size: 16px;
+  color: #6c757d;
+  font-style: italic;
 }
 
 /* Tableau */
+.formateurs-wrapper {
+  margin-top: 20px;
+}
+
 .formateurs-table {
   width: 100%;
   border-collapse: collapse;
-  flex-grow: 1;
 }
 
 .formateurs-table th,
 .formateurs-table td {
   border: 1px solid #ddd;
-  padding: 12px;
-  text-align: left;
+  padding: 10px;
 }
 
 .formateurs-table th {
-  background-color: #4c2550; /* bleu turquoise */
+  background-color: #3a1e3a;
   color: white;
 }
 
 /* Boutons */
 .btn-add-formateur {
-  background-color: #df5bd4;
+  background-color: #b968af;
   border: none;
   padding: 10px 15px;
   border-radius: 6px;
@@ -41,7 +55,6 @@
   padding: 5px 10px;
   margin-right: 5px;
   border-radius: 4px;
-  cursor: pointer;
 }
 
 .btn-delete {
@@ -49,7 +62,6 @@
   border: none;
   padding: 5px 10px;
   border-radius: 4px;
-  cursor: pointer;
   color: white;
 }
 
@@ -63,7 +75,7 @@
 }
 
 .pagination button {
-  background-color: #dc83e7;
+  background-color: #28a745;
   border: none;
   padding: 6px 12px;
   border-radius: 4px;
@@ -89,7 +101,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: fadeIn 0.3s ease-in-out;
 }
 
 .popup-content {
@@ -98,14 +109,13 @@
   border-radius: 12px;
   width: 450px;
   box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-  animation: slideDown 0.4s ease;
 }
 
 .popup-title {
   margin-bottom: 20px;
   font-size: 22px;
   font-weight: bold;
-  color: #ab17b8;
+  color: #28a745;
   text-align: center;
 }
 
@@ -117,12 +127,5 @@
 
 .form-group label {
   font-weight: 600;
-  margin-bottom: 5px;
-  color: #333;
-}
-
-.form-group input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 12px;
+  margin-bottom: 18px
 }

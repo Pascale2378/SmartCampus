@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import "../../styles/page.css";
 import "../../styles/formateurs.css";
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function Formateurs() {
   // Liste fictive de formateurs
@@ -15,7 +18,7 @@ export default function Formateurs() {
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const formateursPerPage = 4;
+  const formateursPerPage = 10;
 
   const indexOfLast = currentPage * formateursPerPage;
   const indexOfFirst = indexOfLast - formateursPerPage;
@@ -51,7 +54,12 @@ export default function Formateurs() {
 
   return (
     <div className="page-container formateurs-page">
-      <h1 className="page-title">Gestion des Formateurs</h1>
+      {/* Titre et sous-titre */}
+      <div className="page-header">
+        <h1 className="page-title">Gestion des Formateurs</h1>
+        <p className="page-subtitle">Suivi des enseignants, spécialités et informations de contact</p>
+      </div>
+
       <button className="btn-add-formateur" onClick={handleOpenForm}>
         Ajouter un formateur
       </button>

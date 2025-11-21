@@ -1,0 +1,60 @@
+.historique-parametres-container {
+  background: #f9fafc;
+  padding: 20px;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.btn-settings {
+  background: #6f42c1;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-settings:hover { opacity: 0.9; }
+
+.filters-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+}
+
+.filter-group select {
+  margin-top: 6px;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.full-table {
+  width: 100%;
+  height: calc(100vh - 280px);
+  overflow: auto;
+}
+
+.smart-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff
+}

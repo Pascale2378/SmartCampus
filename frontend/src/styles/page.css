@@ -29,5 +29,5 @@
 .page-container {
   padding: 20px;
   min-height: calc(100vh - 60px); /* occupe toute la hauteur sauf le header */
-  background-color: #E7E6F6; /* couleur de fond */
+  background-color: #f9fafc; /* couleur de fond */
 }

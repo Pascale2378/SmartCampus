@@ -1,0 +1,12 @@
+.recus-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.recus-list li {
+  background: #f1f1f1;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+}

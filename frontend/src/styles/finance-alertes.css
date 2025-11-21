@@ -1,0 +1,119 @@
+.alertes-paiement-container {
+  background: #f9fafc;
+  padding: 20px;
+}
+
+.smart-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.smart-table th {
+  background: #6f42c1;
+  color: #fff;
+  padding: 12px;
+  text-transform: uppercase;
+}
+
+.smart-table td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.smart-table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.smart-table tr:hover {
+  background: #eef5ff;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+  color: #666;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.pagination button {
+  background: #6f42c1;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.pagination button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.relances-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 24px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.card-title {
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #6f42c1;
+}
+
+.card-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  color: #333;
+}
+
+.card-form input,
+.card-form select {
+  margin-top: 6px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.btn-primary {
+  background: linear-gradient(45deg, #6f42c1, #3c1b6e);
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+.card-form textarea {
+  margin-top: 6px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  font-family: inherit;
+}

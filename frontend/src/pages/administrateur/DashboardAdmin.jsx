@@ -5,6 +5,12 @@ import "../../styles/dashboardAdmin.css";
 export default function DashboardAdmin() {
   return (
     <div className="dashboard-admin">
+      {/* En-tête de page */}
+      <div className="page-header">
+        <h1 className="page-title">Tableau de bord Administrateur</h1>
+        <p className="page-subtitle">Vue d’ensemble des étudiants, formateurs, personnel et inventaires</p>
+      </div>
+
       {/* Les cartes du haut */}
       <div className="top-cards">
         <div className="card">

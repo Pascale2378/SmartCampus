@@ -15,11 +15,21 @@ export default function Etudiants() {
     { nom: "Linda Fokou", matricule: "ETU008", filiere: "Physique", email: "linda.fokou@mail.com", contact: "+237 695 44 55 66" },
     { nom: "Joseph Nguetcha", matricule: "ETU009", filiere: "Chimie", email: "joseph.nguetcha@mail.com", contact: "+237 696 77 88 99" },
     { nom: "Claudine Mvondo", matricule: "ETU010", filiere: "Biologie", email: "claudine.mvondo@mail.com", contact: "+237 697 22 33 44" },
+    { nom: "Patrick Tchatchoua", matricule: "ETU011", filiere: "Informatique", email: "patrick.tchatchoua@mail.com", contact: "+237 698 11 22 33" },
+    { nom: "Nathalie Essomba", matricule: "ETU012", filiere: "Mathématiques", email: "nathalie.essomba@mail.com", contact: "+237 699 44 55 66" },
+    { nom: "Eric Mvondo", matricule: "ETU013", filiere: "Physique", email: "eric.mvondo@mail.com", contact: "+237 690 77 88 99" },
+    { nom: "Sylvie Kamdem", matricule: "ETU014", filiere: "Chimie", email: "sylvie.kamdem@mail.com", contact: "+237 691 22 33 44" },
+    { nom: "Roland Fokou", matricule: "ETU015", filiere: "Biologie", email: "roland.fokou@mail.com", contact: "+237 692 55 66 77" },
+    { nom: "Brigitte Nguem", matricule: "ETU016", filiere: "Informatique", email: "brigitte.nguem@mail.com", contact: "+237 693 88 99 00" },
+    { nom: "Samuel Tchoua", matricule: "ETU017", filiere: "Mathématiques", email: "samuel.tchoua@mail.com", contact: "+237 694 11 22 33" },
+    { nom: "Carine Mbarga", matricule: "ETU018", filiere: "Physique", email: "carine.mbarga@mail.com", contact: "+237 695 44 55 66" },
+    { nom: "Franck Essomba", matricule: "ETU019", filiere: "Chimie", email: "franck.essomba@mail.com", contact: "+237 696 77 88 99" },
+    { nom: "Estelle Mvondo", matricule: "ETU020", filiere: "Biologie", email: "estelle.mvondo@mail.com", contact: "+237 697 22 33 44" },
   ]);
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const studentsPerPage = 6;
+  const studentsPerPage = 12;
 
   const indexOfLastStudent = currentPage * studentsPerPage;
   const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
@@ -55,7 +65,12 @@ export default function Etudiants() {
 
   return (
     <div className="page-container etudiants-page">
-      <h1 className="page-title">Gestion des Étudiants</h1>
+      {/* Titre et sous-titre */}
+      <div className="page-header">
+        <h1 className="page-title">Gestion des Étudiants</h1>
+        <p className="page-subtitle">Suivi des inscriptions, filières et informations de contact</p>
+      </div>
+
       <button className="btn-add-student" onClick={handleOpenForm}>
         Ajouter un étudiant
       </button>
@@ -97,42 +112,40 @@ export default function Etudiants() {
         </div>
       </div>
 
-     
-{/* Popup Form */}
-{showForm && (
-  <div className="popup-overlay">
-    <div className="popup-content">
-      <h2 className="popup-title">Ajouter un étudiant</h2>
-      <form className="student-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Nom complet</label>
-          <input type="text" name="nom" value={newStudent.nom} onChange={handleChange} />
+      {/* Popup Form */}
+      {showForm && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <h2 className="popup-title">Ajouter un étudiant</h2>
+            <form className="student-form" onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Nom complet</label>
+                <input type="text" name="nom" value={newStudent.nom} onChange={handleChange} />
+              </div>
+              <div className="form-group">
+                <label>Matricule</label>
+                <input type="text" name="matricule" value={newStudent.matricule} onChange={handleChange} />
+              </div>
+              <div className="form-group">
+                <label>Filière</label>
+                <input type="text" name="filiere" value={newStudent.filiere} onChange={handleChange} />
+              </div>
+              <div className="form-group">
+                <label>Email</label>
+                <input type="email" name="email" value={newStudent.email} onChange={handleChange} />
+              </div>
+              <div className="form-group">
+                <label>Contact</label>
+                <input type="text" name="contact" value={newStudent.contact} onChange={handleChange} />
+              </div>
+              <div className="form-actions">
+                <button type="submit" className="btn-add">✅ Ajouter</button>
+                <button type="button" className="btn-cancel" onClick={handleCloseForm}>❌ Annuler</button>
+              </div>
+            </form>
+          </div>
         </div>
-        <div className="form-group">
-          <label>Matricule</label>
-          <input type="text" name="matricule" value={newStudent.matricule} onChange={handleChange} />
-        </div>
-        <div className="form-group">
-          <label>Filière</label>
-          <input type="text" name="filiere" value={newStudent.filiere} onChange={handleChange} />
-        </div>
-        <div className="form-group">
-          <label>Email</label>
-          <input type="email" name="email" value={newStudent.email} onChange={handleChange} />
-        </div>
-        <div className="form-group">
-          <label>Contact</label>
-          <input type="text" name="contact" value={newStudent.contact} onChange={handleChange} />
-        </div>
-        <div className="form-actions">
-          <button type="submit" className="btn-add">✅ Ajouter</button>
-          <button type="button" className="btn-cancel" onClick={handleCloseForm}>❌ Annuler</button>
-        </div>
-      </form>
-    </div>
-  </div>
       )}
     </div>
   );
 }
-
