@@ -17,7 +17,7 @@ export default function Sidebar() {
     <div className="sidebar">
       <h2 className="sidebar-title">SmartCampus</h2>
 
-      <ul className="sidebar-menu">
+      <ul className="sidebar-menu">                                                                       
         <li><Link to="/"><FaHome /> Accueil</Link></li>
         <li><Link to="/etudiants"><FaUserGraduate /> Gestion des étudiants</Link></li>
         <li><Link to="/formateurs"><FaChalkboardTeacher /> Gestion des formateurs</Link></li>
@@ -69,6 +69,7 @@ export default function Sidebar() {
           {openMenu === "finance" && (
             <ul className="submenu">
               <li><Link to="/finance/paiements">Liste des paiements</Link></li>
+              <li><Link to="/finance/paie">Paie</Link></li>
               <li><Link to="/finance/recus">Reçus et factures</Link></li>
               <li><Link to="/finance/alertes">Alertes de paiement</Link></li>
             </ul>

@@ -1,4 +1,4 @@
-/* Barre supérieure: full width search + right aligned add button */
+/* Barre supérieure */
 .toolbar {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -17,30 +17,23 @@
 }
 
 .btn-add-personnel {
-  background: #3c1b6e; /* violet sombre */
+  background: #3c1b6e;
   color: #fff;
   border: none;
   padding: 10px 14px;
   border-radius: 8px;
   font-weight: 600;
   box-shadow: 0 2px 8px rgba(60,27,110,0.35);
-  transition: transform 0.08s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.08s ease, opacity 0.2s ease;
 }
-
 .btn-add-personnel:hover { transform: translateY(-1px); opacity: 0.95; }
-.btn-add-personnel:active { transform: translateY(0); }
 
-/* Filtre sous la barre de recherche, à gauche */
+/* Filtre */
 .filter-row {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   margin: 8px 0 16px;
-}
-
-.filter-label {
-  font-weight: 600;
-  color: #333;
 }
 
 .filter-select {
@@ -50,31 +43,20 @@
   background: #fff;
 }
 
-/* Tableau plein écran (width/height) */
-.full-table {
-  width: 100%;
-  height: calc(100vh - 260px); /* s’adapte à l’en-tête/toolbar */
-  overflow: auto;
-}
-
-/* Table look & feel amélioré */
+/* Tableau */
 .smart-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse;
   background: #fff;
   border-radius: 12px;
-  overflow: hidden;
   box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 
 .smart-table thead th {
   position: sticky;
   top: 0;
-  background: #611f8d; /* violet foncé pour l’en-tête du tableau */
+  background: #611f8d;
   color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
   padding: 14px 10px;
 }
 
@@ -84,67 +66,11 @@
 }
 
 .smart-table tbody tr:nth-child(even) { background: #fafafa; }
-.smart-table tbody tr:hover { background: #f0edf6; }
 
-.cell-left { text-align: left; }
-.cell-actions { display: flex; gap: 8px; justify-content: center; }
-
-/* Boutons compacts dans le tableau */
+/* Boutons compacts */
 .btn-sm {
   padding: 6px 10px;
   border-radius: 6px;
-}
-
-/* État vide */
-.empty-state {
-  padding: 20px;
-  color: #666;
-  font-style: italic;
-  background: #f8f8fb;
-}
-
-/* Pagination */
-.pagination {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 10px;
-  margin-top: 14px;
-}
-
-.pagination > button {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: none;
-  background: #3c1b6e;
-  color: #fff;
-  font-weight: 600;
-}
-
-.pagination > button:disabled {
-  background: #c9c2da;
-  cursor: not-allowed;
-}
-
-.pages {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.page-btn {
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  background: #fff;
-  color: #333;
-}
-
-.page-btn.active {
-  border-color: #3c1b6e;
-  background: #efe9fb;
-  color: #3c1b6e;
 }
 
 /* Popup */
@@ -155,7 +81,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
   z-index: 1000;
 }
 
@@ -165,7 +90,6 @@
   max-width: 95vw;
   border-radius: 14px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  overflow: hidden;
 }
 
 .popup-header {
@@ -188,13 +112,11 @@
 .popup-form {
   padding: 16px;
   display: grid;
-  grid-template-columns: 1fr;
   gap: 14px;
 }
 
 .form-row label {
   font-weight: 600;
-  display: block;
   margin-bottom: 6px;
 }
 
@@ -204,12 +126,17 @@
   padding: 10px 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  background: #fff;
 }
 
 .popup-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 6px;
+}
+
+/* Empêcher le scroll global */
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* bloque le scroll */
 }

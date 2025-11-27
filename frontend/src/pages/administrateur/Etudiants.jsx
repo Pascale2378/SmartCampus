@@ -3,8 +3,8 @@ import "../../styles/page.css";
 import "../../styles/etudiants.css";
 
 export default function Etudiants() {
-  // Liste fictive d'étudiants
-  const [students, setStudents] = useState([
+  // Données statiques (lecture seule)
+  const students = [
     { nom: "Jean Dupont", matricule: "ETU001", filiere: "Informatique", email: "jean.dupont@mail.com", contact: "+237 699 11 22 33" },
     { nom: "Marie Claire", matricule: "ETU002", filiere: "Mathématiques", email: "marie.claire@mail.com", contact: "+237 677 44 55 66" },
     { nom: "Paul Nguema", matricule: "ETU003", filiere: "Physique", email: "paul.nguema@mail.com", contact: "+237 690 77 88 99" },
@@ -15,66 +15,66 @@ export default function Etudiants() {
     { nom: "Linda Fokou", matricule: "ETU008", filiere: "Physique", email: "linda.fokou@mail.com", contact: "+237 695 44 55 66" },
     { nom: "Joseph Nguetcha", matricule: "ETU009", filiere: "Chimie", email: "joseph.nguetcha@mail.com", contact: "+237 696 77 88 99" },
     { nom: "Claudine Mvondo", matricule: "ETU010", filiere: "Biologie", email: "claudine.mvondo@mail.com", contact: "+237 697 22 33 44" },
-    { nom: "Patrick Tchatchoua", matricule: "ETU011", filiere: "Informatique", email: "patrick.tchatchoua@mail.com", contact: "+237 698 11 22 33" },
-    { nom: "Nathalie Essomba", matricule: "ETU012", filiere: "Mathématiques", email: "nathalie.essomba@mail.com", contact: "+237 699 44 55 66" },
-    { nom: "Eric Mvondo", matricule: "ETU013", filiere: "Physique", email: "eric.mvondo@mail.com", contact: "+237 690 77 88 99" },
-    { nom: "Sylvie Kamdem", matricule: "ETU014", filiere: "Chimie", email: "sylvie.kamdem@mail.com", contact: "+237 691 22 33 44" },
-    { nom: "Roland Fokou", matricule: "ETU015", filiere: "Biologie", email: "roland.fokou@mail.com", contact: "+237 692 55 66 77" },
-    { nom: "Brigitte Nguem", matricule: "ETU016", filiere: "Informatique", email: "brigitte.nguem@mail.com", contact: "+237 693 88 99 00" },
-    { nom: "Samuel Tchoua", matricule: "ETU017", filiere: "Mathématiques", email: "samuel.tchoua@mail.com", contact: "+237 694 11 22 33" },
-    { nom: "Carine Mbarga", matricule: "ETU018", filiere: "Physique", email: "carine.mbarga@mail.com", contact: "+237 695 44 55 66" },
-    { nom: "Franck Essomba", matricule: "ETU019", filiere: "Chimie", email: "franck.essomba@mail.com", contact: "+237 696 77 88 99" },
-    { nom: "Estelle Mvondo", matricule: "ETU020", filiere: "Biologie", email: "estelle.mvondo@mail.com", contact: "+237 697 22 33 44" },
-  ]);
+  ];
+
+  // Recherche
+  const [searchTerm, setSearchTerm] = useState("");
+  const filteredStudents = students.filter((s) =>
+    s.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    s.matricule.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    s.filiere.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    s.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    s.contact.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const studentsPerPage = 12;
+  const studentsPerPage = 6;
+  const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
+  const indexOfLast = currentPage * studentsPerPage;
+  const indexOfFirst = indexOfLast - studentsPerPage;
+  const currentStudents = filteredStudents.slice(indexOfFirst, indexOfLast);
 
-  const indexOfLastStudent = currentPage * studentsPerPage;
-  const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
-  const currentStudents = students.slice(indexOfFirstStudent, indexOfLastStudent);
+  const handleNext = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
+  const handlePrev = () => currentPage > 1 && setCurrentPage(currentPage - 1);
 
-  const totalPages = Math.ceil(students.length / studentsPerPage);
+  // Popups
+  const [showAddPopup, setShowAddPopup] = useState(false);
+  const [showEditPopup, setShowEditPopup] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
 
-  const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-  };
-
-  const handlePrev = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
-  };
-
-  // Popup
-  const [showForm, setShowForm] = useState(false);
-  const [newStudent, setNewStudent] = useState({ nom: "", matricule: "", filiere: "", email: "", contact: "" });
-
-  const handleOpenForm = () => setShowForm(true);
-  const handleCloseForm = () => setShowForm(false);
-
-  const handleChange = (e) => {
-    setNewStudent({ ...newStudent, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setStudents([...students, newStudent]);
-    setNewStudent({ nom: "", matricule: "", filiere: "", email: "", contact: "" });
-    setShowForm(false);
-  };
+  const openAdd = () => setShowAddPopup(true);
+  const openEdit = (student) => { setSelectedStudent(student); setShowEditPopup(true); };
+  const openDelete = (student) => { setSelectedStudent(student); setShowDeletePopup(true); };
+  const closeAll = () => { setShowAddPopup(false); setShowEditPopup(false); setShowDeletePopup(false); setSelectedStudent(null); };
 
   return (
     <div className="page-container etudiants-page">
-      {/* Titre et sous-titre */}
+      {/* En-tête */}
       <div className="page-header">
         <h1 className="page-title">Gestion des Étudiants</h1>
         <p className="page-subtitle">Suivi des inscriptions, filières et informations de contact</p>
       </div>
 
-      <button className="btn-add-student" onClick={handleOpenForm}>
-        Ajouter un étudiant
-      </button>
+      {/* Toolbar : recherche + bouton ajouter */}
+      <div className="toolbar">
+        <input
+          className="search-input"
+          type="text"
+          placeholder="Rechercher un étudiant…"
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setCurrentPage(1);
+          }}
+        />
+        <button className="btn-add-student" onClick={openAdd}>
+          ➕ Ajouter un étudiant
+        </button>
+      </div>
 
+      {/* Tableau */}
       <div className="students-wrapper">
         <table className="students-table">
           <thead>
@@ -88,61 +88,133 @@ export default function Etudiants() {
             </tr>
           </thead>
           <tbody>
-            {currentStudents.map((student, index) => (
-              <tr key={index}>
+            {currentStudents.map((student, idx) => (
+              <tr key={indexOfFirst + idx}>
                 <td>{student.nom}</td>
                 <td>{student.matricule}</td>
                 <td>{student.filiere}</td>
                 <td>{student.email}</td>
                 <td>{student.contact}</td>
-                <td>
-                  <button className="btn-edit">Modifier</button>
-                  <button className="btn-delete">Supprimer</button>
+                <td className="cell-actions">
+                  <button className="btn-edit" onClick={() => openEdit(student)}>✏️ Modifier</button>
+                  <button className="btn-delete" onClick={() => openDelete(student)}>🗑️ Supprimer</button>
                 </td>
               </tr>
             ))}
+            {currentStudents.length === 0 && (
+              <tr>
+                <td colSpan={6} className="empty-state">Aucun étudiant trouvé</td>
+              </tr>
+            )}
           </tbody>
         </table>
 
         {/* Pagination */}
-        <div className="pagination">
-          <button onClick={handlePrev} disabled={currentPage === 1}>Précédent</button>
-          <span>Page {currentPage} / {totalPages}</span>
-          <button onClick={handleNext} disabled={currentPage === totalPages}>Suivant</button>
-        </div>
+        {totalPages > 1 && (
+          <div className="pagination">
+            <button onClick={handlePrev} disabled={currentPage === 1}>⬅️ Précédent</button>
+            <span>Page {currentPage} / {totalPages}</span>
+            <button onClick={handleNext} disabled={currentPage === totalPages}>Suivant ➡️</button>
+          </div>
+        )}
       </div>
 
-      {/* Popup Form */}
-      {showForm && (
-        <div className="popup-overlay">
-          <div className="popup-content">
-            <h2 className="popup-title">Ajouter un étudiant</h2>
-            <form className="student-form" onSubmit={handleSubmit}>
+      {/* Popup Ajouter */}
+      {showAddPopup && (
+        <div className="popup-overlay" onClick={closeAll}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <div className="popup-header">
+              <h2>Ajouter un étudiant</h2>
+              <button className="close-btn" onClick={closeAll}>✖</button>
+            </div>
+            <form className="student-form" onSubmit={(e) => e.preventDefault()}>
               <div className="form-group">
                 <label>Nom complet</label>
-                <input type="text" name="nom" value={newStudent.nom} onChange={handleChange} />
+                <input type="text" placeholder="Nom de l'étudiant" />
               </div>
               <div className="form-group">
                 <label>Matricule</label>
-                <input type="text" name="matricule" value={newStudent.matricule} onChange={handleChange} />
+                <input type="text" placeholder="Matricule" />
               </div>
               <div className="form-group">
                 <label>Filière</label>
-                <input type="text" name="filiere" value={newStudent.filiere} onChange={handleChange} />
+                <input type="text" placeholder="Filière" />
               </div>
               <div className="form-group">
                 <label>Email</label>
-                <input type="email" name="email" value={newStudent.email} onChange={handleChange} />
+                <input type="email" placeholder="Email" />
               </div>
               <div className="form-group">
                 <label>Contact</label>
-                <input type="text" name="contact" value={newStudent.contact} onChange={handleChange} />
+                <input type="text" placeholder="Téléphone" />
               </div>
               <div className="form-actions">
-                <button type="submit" className="btn-add">✅ Ajouter</button>
-                <button type="button" className="btn-cancel" onClick={handleCloseForm}>❌ Annuler</button>
+                <button type="button" className="btn-add">✅ Ajouter</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Popup Modifier */}
+      {showEditPopup && selectedStudent && (
+        <div className="popup-overlay" onClick={closeAll}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <div className="popup-header">
+              <h2>Modifier un étudiant</h2>
+              <button className="close-btn" onClick={closeAll}>✖</button>
+            </div>
+            <form className="student-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="form-group">
+                <label>Nom complet</label>
+                <input type="text" defaultValue={selectedStudent.nom} />
+              </div>
+              <div className="form-group">
+                <label>Matricule</label>
+                <input type="text" defaultValue={selectedStudent.matricule} />
+              </div>
+              <div className="form-group">
+                <label>Filière</label>
+                <input type="text" defaultValue={selectedStudent.filiere} />
+              </div>
+              <div className="form-group">
+                <label>Email</label>
+                <input type="email" defaultValue={selectedStudent.email} />
+              </div>
+              <div className="form-group">
+                <label>Contact</label>
+                <input type="text" defaultValue={selectedStudent.contact} />
+              </div>
+              <div className="form-actions">
+                <button type="button" className="btn-add">💾 Enregistrer</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Popup Supprimer */}
+      {showDeletePopup && selectedStudent && (
+        <div className="popup-overlay" onClick={closeAll}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <div className="popup-header">
+              <h2>Supprimer un étudiant</h2>
+              <button className="close-btn" onClick={closeAll}>✖</button>
+            </div>
+            <div className="confirm-content">
+              <p>Voulez-vous vraiment supprimer l’étudiant suivant ?</p>
+              <ul>
+                <li><strong>Nom :</strong> {selectedStudent.nom}</li>
+                <li><strong>Matricule :</strong> {selectedStudent.matricule}</li>
+                <li><strong>Filière :</strong> {selectedStudent.filiere}</li>
+              </ul>
+              <div className="form-actions">
+                <button type="button" className="btn-delete">🗑️ Supprimer</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
+              </div>
+            </div>
           </div>
         </div>
       )}

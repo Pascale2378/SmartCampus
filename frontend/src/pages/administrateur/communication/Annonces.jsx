@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import "../../../styles/page.css";
 import "../../../styles/communication-annonces.css";
@@ -6,15 +7,20 @@ export default function AnnoncesGlobales() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCible, setFilterCible] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [showPopup, setShowPopup] = useState(false);
-  const itemsPerPage = 10;
 
+  const [showAddPopup, setShowAddPopup] = useState(false);
+  const [showEditPopup, setShowEditPopup] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [selectedAnnonce, setSelectedAnnonce] = useState(null);
+
+  const itemsPerPage = 6;
+
+  // Liste figée (statique)
   const annonces = [
     { titre: "Maintenance serveur", contenu: "Le serveur principal sera en maintenance ce weekend…", cible: "Tous", publication: "2025-11-15", expiration: "2025-11-20", statut: "Active" },
     { titre: "Nouvelle formation", contenu: "Une formation sur la cybersécurité est prévue…", cible: "Personnel", publication: "2025-11-10", expiration: "2025-11-30", statut: "Active" },
     { titre: "Vacances scolaires", contenu: "Les vacances débuteront le 20 décembre…", cible: "Étudiants", publication: "2025-11-05", expiration: "2025-12-20", statut: "Active" },
     { titre: "Réunion générale", contenu: "Réunion prévue pour tous les départements…", cible: "Tous", publication: "2025-11-01", expiration: "2025-11-10", statut: "Expirée" },
-    // ➕ Ajoute plus d’annonces pour tester la pagination
   ];
 
   // Filtrage
@@ -30,6 +36,15 @@ export default function AnnoncesGlobales() {
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const pageItems = filtered.slice(startIndex, startIndex + itemsPerPage);
+
+  const goPrev = () => setCurrentPage((p) => Math.max(1, p - 1));
+  const goNext = () => setCurrentPage((p) => Math.min(totalPages, p + 1));
+
+  // Ouvrir/Fermer popups
+  const openAdd = () => setShowAddPopup(true);
+  const openEdit = (a) => { setSelectedAnnonce(a); setShowEditPopup(true); };
+  const openDelete = (a) => { setSelectedAnnonce(a); setShowDeletePopup(true); };
+  const closeAll = () => { setShowAddPopup(false); setShowEditPopup(false); setShowDeletePopup(false); setSelectedAnnonce(null); };
 
   return (
     <div className="page-container annonces-globales-container">
@@ -50,7 +65,7 @@ export default function AnnoncesGlobales() {
             setCurrentPage(1);
           }}
         />
-        <button className="btn btn-add-annonce" onClick={() => setShowPopup(true)}>
+        <button className="btn btn-add-annonce" onClick={openAdd}>
           ➕ Nouvelle annonce
         </button>
       </div>
@@ -99,8 +114,8 @@ export default function AnnoncesGlobales() {
                   {a.statut === "Expirée" && <span className="badge badge-danger">Expirée</span>}
                 </td>
                 <td>
-                  <button className="btn btn-success btn-sm">✏️ Modifier</button>
-                  <button className="btn btn-danger btn-sm">🗑️ Supprimer</button>
+                  <button className="btn btn-success btn-sm" onClick={() => openEdit(a)}>✏️ Modifier</button>
+                  <button className="btn btn-danger btn-sm" onClick={() => openDelete(a)}>🗑️ Supprimer</button>
                 </td>
               </tr>
             ))}
@@ -115,51 +130,103 @@ export default function AnnoncesGlobales() {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="pagination">
-            <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>⬅️ Précédent</button>
+            <button disabled={currentPage === 1} onClick={goPrev}>⬅️ Précédent</button>
             <span>Page {currentPage} / {totalPages}</span>
-            <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>Suivant ➡️</button>
+            <button disabled={currentPage === totalPages} onClick={goNext}>Suivant ➡️</button>
           </div>
         )}
       </div>
 
-      {/* Popup nouvelle annonce */}
-      {showPopup && (
-        <div className="popup-overlay" onClick={() => setShowPopup(false)}>
+      {/* Popup Ajouter */}
+      {showAddPopup && (
+        <div className="popup-overlay" onClick={closeAll}>
           <div className="popup-content" onClick={(e) => e.stopPropagation()}>
             <div className="popup-header">
               <h2>Nouvelle annonce</h2>
-              <button className="close-btn" onClick={() => setShowPopup(false)}>✖</button>
+              <button className="close-btn" onClick={closeAll}>✖</button>
             </div>
-            <form className="popup-form">
-              <label>
-                Titre :
-                <input type="text" placeholder="Titre de l’annonce" />
-              </label>
-              <label>
-                Contenu :
-                <textarea rows={4} placeholder="Texte de l’annonce"></textarea>
-              </label>
-              <label>
-                Cible :
-                <select>
-                  <option>Tous</option>
-                  <option>Personnel</option>
-                  <option>Étudiants</option>
+            <form className="popup-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="form-group"><label>Titre :</label><input type="text" placeholder="Titre de l’annonce" required /></div>
+              <div className="form-group"><label>Contenu :</label><textarea rows={4} placeholder="Texte de l’annonce" required></textarea></div>
+              <div className="form-group">
+                <label>Cible :</label>
+                <select required>
+                  <option value="Tous">Tous</option>
+                  <option value="Personnel">Personnel</option>
+                  <option value="Étudiants">Étudiants</option>
                 </select>
-              </label>
-              <label>
-                Date de publication :
-                <input type="date" />
-              </label>
-              <label>
-                Date d’expiration :
-                <input type="date" />
-              </label>
-              <div className="popup-actions">
-                <button type="submit" className="btn btn-success">✅ Publier</button>
-                <button type="button" className="btn btn-danger" onClick={() => setShowPopup(false)}>❌ Annuler</button>
+              </div>
+              <div className="form-group"><label>Date de publication :</label><input type="date" required /></div>
+              <div className="form-group"><label>Date d’expiration :</label><input type="date" required /></div>
+              <div className="form-actions">
+                <button type="button" className="btn-add">✅ Publier</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Popup Modifier */}
+      {showEditPopup && selectedAnnonce && (
+        <div className="popup-overlay" onClick={closeAll}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <div className="popup-header">
+              <h2>Modifier une annonce</h2>
+              <button className="close-btn" onClick={closeAll}>✖</button>
+            </div>
+            <form className="popup-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="form-group"><label>Titre :</label><input type="text" defaultValue={selectedAnnonce.titre} /></div>
+                          <div className="form-group"><label>Contenu :</label><textarea rows={4} defaultValue={selectedAnnonce.contenu}></textarea></div>
+              <div className="form-group">
+                <label>Cible :</label>
+                <select defaultValue={selectedAnnonce.cible}>
+                  <option value="Tous">Tous</option>
+                  <option value="Personnel">Personnel</option>
+                  <option value="Étudiants">Étudiants</option>
+                </select>
+              </div>
+              <div className="form-group"><label>Date de publication :</label><input type="date" defaultValue={selectedAnnonce.publication} /></div>
+              <div className="form-group"><label>Date d’expiration :</label><input type="date" defaultValue={selectedAnnonce.expiration} /></div>
+              <div className="form-group">
+                <label>Statut :</label>
+                <select defaultValue={selectedAnnonce.statut}>
+                  <option value="Active">Active</option>
+                  <option value="Expirée">Expirée</option>
+                </select>
+              </div>
+              <div className="form-actions">
+                <button type="button" className="btn-add">💾 Enregistrer</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Popup Supprimer */}
+      {showDeletePopup && selectedAnnonce && (
+        <div className="popup-overlay" onClick={closeAll}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <div className="popup-header">
+              <h2>Supprimer une annonce</h2>
+              <button className="close-btn" onClick={closeAll}>✖</button>
+            </div>
+            <div className="confirm-content">
+              <p>Voulez-vous vraiment supprimer cette annonce ? (Action inactive pour l’instant)</p>
+              <ul>
+                <li><strong>Titre :</strong> {selectedAnnonce.titre}</li>
+                <li><strong>Contenu :</strong> {selectedAnnonce.contenu}</li>
+                <li><strong>Cible :</strong> {selectedAnnonce.cible}</li>
+                <li><strong>Publication :</strong> {selectedAnnonce.publication}</li>
+                <li><strong>Expiration :</strong> {selectedAnnonce.expiration}</li>
+                <li><strong>Statut :</strong> {selectedAnnonce.statut}</li>
+              </ul>
+              <div className="form-actions">
+                <button type="button" className="btn-delete">🗑️ Supprimer</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
+              </div>
+            </div>
           </div>
         </div>
       )}

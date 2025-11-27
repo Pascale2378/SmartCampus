@@ -4,15 +4,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #6f42c1, #007bff, #20c997);
+  background: linear-gradient(135deg, #6f42c1, #20c997);
   animation: gradientShift 10s infinite alternate;
   color: #fff;
 }
 
 @keyframes gradientShift {
-  0% { background: linear-gradient(135deg, #6f42c1, #007bff); }
-  50% { background: linear-gradient(135deg, #007bff, #20c997); }
-  100% { background: linear-gradient(135deg, #20c997, #6f42c1); }
+  0% { background: linear-gradient(135deg, #6f42c1, #773288); }
+  50% { background: linear-gradient(135deg, #3f173d, #90039c); }
+  100% { background: linear-gradient(135deg, #929417, #2e1064); }
 }
 
 .logout-card {

@@ -1,4 +1,4 @@
-.recus-factures-container {
+.paie-container {
   background: #f9fafc;
   padding: 20px;
 }
@@ -27,13 +27,6 @@
   cursor: pointer;
 }
 .btn-add:hover { opacity: 0.9; }
-
-.filters-row {
-  margin-bottom: 16px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
 
 .smart-table {
   width: 100%;
@@ -64,6 +57,20 @@
   background: #eef5ff;
 }
 
+.badge-success {
+  background: #28a745;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.badge-warning {
+  background: #ffc107;
+  color: #000;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
 .empty-state {
   text-align: center;
   padding: 20px;
@@ -77,6 +84,20 @@
   margin-top: 12px;
 }
 
+.pagination button {
+  background: #6f42c1;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.pagination button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
 .popup-overlay {
   position: fixed;
   inset: 0;
@@ -88,4 +109,27 @@
 
 .popup-content {
   background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  width: 400px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }

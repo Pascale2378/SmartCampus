@@ -17,53 +17,84 @@
   font-style: italic;
 }
 
-/* Tableau */
+/* Bouton ajouter formateur */
+.btn-add-formateur {
+  background-color: #3c1b6e; /* violet sombre comme les autres */
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(60,27,110,0.35);
+  transition: transform 0.08s ease, opacity 0.2s ease;
+  margin-bottom: 15px;
+}
+.btn-add-formateur:hover { transform: translateY(-1px); opacity: 0.95; }
+
+/* Tableau harmonisé */
 .formateurs-wrapper {
   margin-top: 20px;
 }
 
 .formateurs-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 
-.formateurs-table th,
+.formateurs-table thead th {
+  position: sticky;
+  top: 0;
+  background: #1f1227; /* violet foncé */
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding: 14px 10px;
+}
+
 .formateurs-table td {
-  border: 1px solid #ddd;
-  padding: 10px;
+  padding: 12px 10px;
+  border-bottom: 1px solid #eee;
 }
 
-.formateurs-table th {
-  background-color: #3a1e3a;
-  color: white;
-}
+.formateurs-table tbody tr:nth-child(even) { background: #fafafa; }
+.formateurs-table tbody tr:hover { background: #f0edf6; }
 
-/* Boutons */
-.btn-add-formateur {
-  background-color: #b968af;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 6px;
-  cursor: pointer;
-  color: white;
-  margin-bottom: 15px;
-}
+.cell-actions { display: flex; gap: 8px; justify-content: center; }
 
+/* Boutons dans le tableau */
 .btn-edit {
   background-color: #ffc107;
   border: none;
-  padding: 5px 10px;
-  margin-right: 5px;
-  border-radius: 4px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 .btn-delete {
   background-color: #dc3545;
   border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
+  padding: 6px 10px;
+  border-radius: 6px;
   color: white;
+  cursor: pointer;
 }
+
+/* Badges statut (si besoin) */
+.badge {
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.badge-success { background: #28a745; color: #fff; }
+.badge-warning { background: #ffc107; color: #212529; }
+.badge-danger  { background: #dc3545; color: #fff; }
 
 /* Pagination */
 .pagination {
@@ -75,16 +106,17 @@
 }
 
 .pagination button {
-  background-color: #28a745;
+  background-color: #3c1b6e;
   border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
+  padding: 8px 12px;
+  border-radius: 8px;
   cursor: pointer;
   color: white;
+  font-weight: 600;
 }
 
 .pagination button:disabled {
-  background-color: #ccc;
+  background-color: #c9c2da;
   cursor: not-allowed;
 }
 
@@ -95,27 +127,28 @@
 /* Popup */
 .popup-overlay {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
+  inset: 0;
+  background: rgba(0,0,0,0.55);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .popup-content {
   background: #fff;
-  padding: 30px;
-  border-radius: 12px;
-  width: 450px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  padding: 24px;
+  border-radius: 14px;
+  width: 480px;
+  max-width: 95vw;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
 }
 
 .popup-title {
   margin-bottom: 20px;
   font-size: 22px;
   font-weight: bold;
-  color: #28a745;
+  color: #3c1b6e;
   text-align: center;
 }
 
@@ -127,5 +160,22 @@
 
 .form-group label {
   font-weight: 600;
-  margin-bottom: 18px
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
 }

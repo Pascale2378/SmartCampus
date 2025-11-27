@@ -1,15 +1,21 @@
+
 import { useState } from "react";
 import "../../../styles/page.css";
 import "../../../styles/inventaires-liste.css";
 
 export default function InventairesListe() {
-  const [showPopup, setShowPopup] = useState(false);
+  const [showAddPopup, setShowAddPopup] = useState(false);
+  const [showEditPopup, setShowEditPopup] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [selectedArticle, setSelectedArticle] = useState(null);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 6;
 
+  // Liste figée (statique)
   const articles = [
     { reference: "INV-001", article: "Ordinateur Dell", categorie: "Informatique", quantite: 10, statut: "Bon", etat: "OK" },
     { reference: "INV-002", article: "Projecteur Epson", categorie: "Audiovisuel", quantite: 3, statut: "Utilisable", etat: "OK" },
@@ -21,9 +27,9 @@ export default function InventairesListe() {
     { reference: "INV-008", article: "Micro sans fil", categorie: "Audiovisuel", quantite: 6, statut: "Bon", etat: "OK" },
     { reference: "INV-009", article: "Switch 24 ports", categorie: "Réseau", quantite: 4, statut: "Bon", etat: "OK" },
     { reference: "INV-010", article: "Extincteur", categorie: "Sécurité", quantite: 20, statut: "Bon", etat: "OK" },
-    // Ajoute plus d’articles si besoin
   ];
 
+  // Filtrage
   const filtered = articles.filter((a) => {
     const matchSearch =
       a.article.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -33,6 +39,7 @@ export default function InventairesListe() {
     return matchSearch && matchCategory && matchStatus;
   });
 
+  // Pagination
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
   const start = (currentPage - 1) * itemsPerPage;
   const pageItems = filtered.slice(start, start + itemsPerPage);
@@ -41,6 +48,12 @@ export default function InventairesListe() {
   const goNext = () => setCurrentPage((p) => Math.min(totalPages, p + 1));
   const goTo = (n) => setCurrentPage(n);
 
+  // Ouvrir/Fermer popups
+  const openAdd = () => setShowAddPopup(true);
+  const openEdit = (a) => { setSelectedArticle(a); setShowEditPopup(true); };
+  const openDelete = (a) => { setSelectedArticle(a); setShowDeletePopup(true); };
+  const closeAll = () => { setShowAddPopup(false); setShowEditPopup(false); setShowDeletePopup(false); setSelectedArticle(null); };
+
   return (
     <div className="page-container inventaires-liste-container">
       <div className="page-header">
@@ -48,7 +61,7 @@ export default function InventairesListe() {
         <p className="page-subtitle">Recherche, filtres et gestion des articles</p>
       </div>
 
-      {/* Barre de recherche full width + bouton à droite */}
+      {/* Barre de recherche */}
       <div className="toolbar">
         <input
           className="search-input"
@@ -60,12 +73,12 @@ export default function InventairesListe() {
             setCurrentPage(1);
           }}
         />
-        <button className="btn btn-add-article" onClick={() => setShowPopup(true)}>
+        <button className="btn btn-add-article" onClick={openAdd}>
           ➕ Ajouter un article
         </button>
       </div>
 
-      {/* Filtres sous la barre de recherche: catégorie + statut (à gauche) */}
+      {/* Filtres */}
       <div className="filters-row">
         <div className="filter-group">
           <label className="filter-label">Catégorie</label>
@@ -104,7 +117,7 @@ export default function InventairesListe() {
         </div>
       </div>
 
-      {/* Tableau pleine largeur/hauteur */}
+      {/* Tableau */}
       <div className="page-content full-table">
         <table className="smart-table smart-table--spacious">
           <thead>
@@ -130,8 +143,8 @@ export default function InventairesListe() {
                   {a.statut === "Maintenance" && <span className="badge badge-warning">Maintenance</span>}
                 </td>
                 <td className="cell-actions">
-                  <button className="btn btn-success btn-sm">✏️ Modifier</button>
-                  <button className="btn btn-danger btn-sm">🗑️ Supprimer</button>
+                  <button className="btn btn-success btn-sm" onClick={() => openEdit(a)}>✏️ Modifier</button>
+                  <button className="btn btn-danger btn-sm" onClick={() => openDelete(a)}>🗑️ Supprimer</button>
                 </td>
               </tr>
             ))}
@@ -143,7 +156,7 @@ export default function InventairesListe() {
           </tbody>
         </table>
 
-        {/* Pagination 10 par page */}
+        {/* Pagination */}
         {totalPages > 1 && (
           <div className="pagination">
             <button disabled={currentPage === 1} onClick={goPrev}>⬅️ Précédent</button>
@@ -166,56 +179,112 @@ export default function InventairesListe() {
         )}
       </div>
 
-      {/* Popup d’ajout d’article */}
-      {showPopup && (
-        <div className="popup-overlay" onClick={() => setShowPopup(false)}>
+      {/* Popup Ajouter */}
+      {showAddPopup && (
+        <div className="popup-overlay" onClick={closeAll}>
           <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-            <div className="popup-header">
+                       <div className="popup-header">
               <h2>Ajouter un article</h2>
-              <button className="close-btn" onClick={() => setShowPopup(false)}>✖</button>
+              <button className="close-btn" onClick={closeAll}>✖</button>
             </div>
-            <form className="popup-form">
-              <div className="form-grid">
-                <div className="form-item">
-                  <label>Référence</label>
-                  <input type="text" placeholder="Ex: INV-011" />
-                </div>
-                <div className="form-item">
-                  <label>Article</label>
-                  <input type="text" placeholder="Nom de l’article" />
-                </div>
-                <div className="form-item">
-                  <label>Catégorie</label>
-                  <select>
-                    <option>Informatique</option>
-                    <option>Audiovisuel</option>
-                    <option>Mobilier</option>
-                    <option>Réseau</option>
-                    <option>Sécurité</option>
-                  </select>
-                </div>
-                <div className="form-item">
-                  <label>Quantité</label>
-                  <input type="number" min="0" placeholder="0" />
-                </div>
-                <div className="form-item">
-                  <label>Statut</label>
-                  <select>
-                    <option>Bon</option>
-                    <option>Utilisable</option>
-                    <option>Maintenance</option>
-                  </select>
-                </div>
-                <div className="form-item">
-                  <label>Notes</label>
-                  <textarea rows={3} placeholder="Commentaires (optionnel)"></textarea>
-                </div>
+            <form className="popup-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="form-group">
+                <label>Référence</label>
+                <input type="text" placeholder="Référence" required />
               </div>
-              <div className="popup-actions">
-                <button type="submit" className="btn btn-success">✅ Enregistrer</button>
-                <button type="button" className="btn btn-danger" onClick={() => setShowPopup(false)}>❌ Annuler</button>
+              <div className="form-group">
+                <label>Article</label>
+                <input type="text" placeholder="Nom de l'article" required />
+              </div>
+              <div className="form-group">
+                <label>Catégorie</label>
+                <input type="text" placeholder="Catégorie" required />
+              </div>
+              <div className="form-group">
+                <label>Quantité</label>
+                <input type="number" placeholder="Quantité" required />
+              </div>
+              <div className="form-group">
+                <label>Statut</label>
+                <select required>
+                  <option value="Bon">Bon</option>
+                  <option value="Utilisable">Utilisable</option>
+                  <option value="Maintenance">Maintenance</option>
+                </select>
+              </div>
+              <div className="form-actions">
+                <button type="button" className="btn-add">✅ Ajouter</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Popup Modifier */}
+      {showEditPopup && selectedArticle && (
+        <div className="popup-overlay" onClick={closeAll}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <div className="popup-header">
+              <h2>Modifier un article</h2>
+              <button className="close-btn" onClick={closeAll}>✖</button>
+            </div>
+            <form className="popup-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="form-group">
+                <label>Référence</label>
+                <input type="text" defaultValue={selectedArticle.reference} />
+              </div>
+              <div className="form-group">
+                <label>Article</label>
+                <input type="text" defaultValue={selectedArticle.article} />
+              </div>
+              <div className="form-group">
+                <label>Catégorie</label>
+                <input type="text" defaultValue={selectedArticle.categorie} />
+              </div>
+              <div className="form-group">
+                <label>Quantité</label>
+                <input type="number" defaultValue={selectedArticle.quantite} />
+              </div>
+              <div className="form-group">
+                <label>Statut</label>
+                <select defaultValue={selectedArticle.statut}>
+                  <option value="Bon">Bon</option>
+                  <option value="Utilisable">Utilisable</option>
+                  <option value="Maintenance">Maintenance</option>
+                </select>
+              </div>
+              <div className="form-actions">
+                <button type="button" className="btn-add">💾 Enregistrer</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Popup Supprimer */}
+      {showDeletePopup && selectedArticle && (
+        <div className="popup-overlay" onClick={closeAll}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <div className="popup-header">
+              <h2>Supprimer un article</h2>
+              <button className="close-btn" onClick={closeAll}>✖</button>
+            </div>
+            <div className="confirm-content">
+              <p>Voulez-vous vraiment supprimer cet article ? (Action inactive pour l’instant)</p>
+              <ul>
+                <li><strong>Référence :</strong> {selectedArticle.reference}</li>
+                <li><strong>Article :</strong> {selectedArticle.article}</li>
+                <li><strong>Catégorie :</strong> {selectedArticle.categorie}</li>
+                <li><strong>Quantité :</strong> {selectedArticle.quantite}</li>
+                <li><strong>Statut :</strong> {selectedArticle.statut}</li>
+              </ul>
+              <div className="form-actions">
+                <button type="button" className="btn-delete">🗑️ Supprimer</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
+              </div>
+            </div>
           </div>
         </div>
       )}

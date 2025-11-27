@@ -1,34 +1,39 @@
+
 import { useState } from "react";
 import "../../../styles/page.css";
 import "../../../styles/personnel-conges.css";
 
-export default function PersonnelConges() {
-  const [showPopup, setShowPopup] = useState(false);
+export default function Conges() {
+  const [showAddPopup, setShowAddPopup] = useState(false);
+  const [showEditPopup, setShowEditPopup] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [selectedDemande, setSelectedDemande] = useState(null);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [filterFunction, setFilterFunction] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 6;
 
+  // Liste figée (statique)
   const demandes = [
     { nom: "Jean Dupont", fonction: "Professeur", type: "Congé annuel", debut: "2025-12-01", fin: "2025-12-15", statut: "Approuvé" },
     { nom: "Marie Claire", fonction: "Secrétaire", type: "Maladie", debut: "2025-11-20", fin: "2025-11-25", statut: "En attente" },
     { nom: "Paul Nguema", fonction: "Comptable", type: "Congé exceptionnel", debut: "2025-12-05", fin: "2025-12-08", statut: "Refusé" },
     { nom: "Alice Essono", fonction: "Professeur", type: "Congé annuel", debut: "2025-12-10", fin: "2025-12-20", statut: "Approuvé" },
-    { nom: "David Tchoumba", fonction: "Secrétaire", type: "Maladie", debut: "2025-11-18", fin: "2025-11-22", statut: "En attente" },
-    { nom: "Sarah Kouassi", fonction: "Comptable", type: "Congé annuel", debut: "2025-12-02", fin: "2025-12-12", statut: "Approuvé" },
-    { nom: "Pierre Martin", fonction: "Professeur", type: "Congé exceptionnel", debut: "2025-12-03", fin: "2025-12-05", statut: "Refusé" },
-    { nom: "Laura Biyong", fonction: "Secrétaire", type: "Congé annuel", debut: "2025-12-07", fin: "2025-12-17", statut: "En attente" },
-    { nom: "Hervé Nchout", fonction: "Comptable", type: "Maladie", debut: "2025-11-28", fin: "2025-12-01", statut: "Approuvé" },
-    { nom: "Nadia Olinga", fonction: "Professeur", type: "Congé annuel", debut: "2025-12-22", fin: "2026-01-02", statut: "En attente" },
-    { nom: "Marc Ewane", fonction: "Professeur", type: "Congé exceptionnel", debut: "2025-12-11", fin: "2025-12-13", statut: "Approuvé" },
+    { nom: "Jean Dupont", fonction: "Professeur", type: "Congé annuel", debut: "2025-12-01", fin: "2025-12-15", statut: "Approuvé" },
+    { nom: "Marie Claire", fonction: "Secrétaire", type: "Maladie", debut: "2025-11-20", fin: "2025-11-25", statut: "En attente" },
+    { nom: "Jean Dupont", fonction: "Professeur", type: "Congé annuel", debut: "2025-12-01", fin: "2025-12-15", statut: "Approuvé" },
+    { nom: "Marie Claire", fonction: "Secrétaire", type: "Maladie", debut: "2025-11-20", fin: "2025-11-25", statut: "En attente" },
   ];
 
+  // Filtrage
   const filtered = demandes.filter(
     (d) =>
       d.nom.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (filterFunction === "" || d.fonction === filterFunction)
   );
 
+  // Pagination
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
   const start = (currentPage - 1) * itemsPerPage;
   const pageItems = filtered.slice(start, start + itemsPerPage);
@@ -37,6 +42,12 @@ export default function PersonnelConges() {
   const goNext = () => setCurrentPage((p) => Math.min(totalPages, p + 1));
   const goTo = (n) => setCurrentPage(n);
 
+  // Ouvrir/Fermer popups
+  const openAdd = () => setShowAddPopup(true);
+  const openEdit = (d) => { setSelectedDemande(d); setShowEditPopup(true); };
+  const openDelete = (d) => { setSelectedDemande(d); setShowDeletePopup(true); };
+  const closeAll = () => { setShowAddPopup(false); setShowEditPopup(false); setShowDeletePopup(false); setSelectedDemande(null); };
+
   return (
     <div className="page-container personnel-conges-container">
       <div className="page-header">
@@ -44,7 +55,7 @@ export default function PersonnelConges() {
         <p className="page-subtitle">Recherche, filtre par fonction et gestion des demandes</p>
       </div>
 
-      {/* Barre de recherche full width + bouton à droite */}
+      {/* Barre de recherche + bouton */}
       <div className="toolbar">
         <input
           className="search-input"
@@ -56,12 +67,12 @@ export default function PersonnelConges() {
             setCurrentPage(1);
           }}
         />
-        <button className="btn btn-new-request" onClick={() => setShowPopup(true)}>
+        <button className="btn btn-new-request" onClick={openAdd}>
           ➕ Nouvelle demande
         </button>
       </div>
 
-      {/* Filtre par fonction, sous la barre de recherche à gauche */}
+      {/* Filtre */}
       <div className="filter-row">
         <label className="filter-label">Filtrer par fonction</label>
         <select
@@ -79,7 +90,7 @@ export default function PersonnelConges() {
         </select>
       </div>
 
-      {/* Tableau plein écran */}
+      {/* Tableau */}
       <div className="page-content full-table">
         <table className="smart-table smart-table--spacious">
           <thead>
@@ -107,8 +118,8 @@ export default function PersonnelConges() {
                   {d.statut === "Refusé" && <span className="badge badge-danger">Refusé</span>}
                 </td>
                 <td className="cell-actions">
-                  <button className="btn btn-success btn-sm">✏️ Modifier</button>
-                  <button className="btn btn-danger btn-sm">🗑️ Supprimer</button>
+                  <button className="btn btn-success btn-sm" onClick={() => openEdit(d)}>✏️ Modifier</button>
+                  <button className="btn btn-danger btn-sm" onClick={() => openDelete(d)}>🗑️ Supprimer</button>
                 </td>
               </tr>
             ))}
@@ -120,7 +131,7 @@ export default function PersonnelConges() {
           </tbody>
         </table>
 
-        {/* Pagination 10 par page */}
+        {/* Pagination */}
         {totalPages > 1 && (
           <div className="pagination">
             <button disabled={currentPage === 1} onClick={goPrev}>⬅️ Précédent</button>
@@ -143,55 +154,121 @@ export default function PersonnelConges() {
         )}
       </div>
 
-      {/* Popup pro: nouvelle demande */}
-      {showPopup && (
-        <div className="popup-overlay" onClick={() => setShowPopup(false)}>
+      {/* Popup Ajouter */}
+      {showAddPopup && (
+        <div className="popup-overlay" onClick={closeAll}>
           <div className="popup-content" onClick={(e) => e.stopPropagation()}>
             <div className="popup-header">
               <h2>Nouvelle demande de congé</h2>
-              <button className="close-btn" onClick={() => setShowPopup(false)}>✖</button>
+              <button className="close-btn" onClick={closeAll}>✖</button>
             </div>
-            <form className="popup-form">
-              <div className="form-grid">
-                <div className="form-item">
-                  <label>Nom complet</label>
-                  <input type="text" placeholder="Ex: Jean Dupont" />
-                </div>
-                <div className="form-item">
-                  <label>Fonction</label>
-                  <select>
-                    <option>Professeur</option>
-                    <option>Secrétaire</option>
-                    <option>Comptable</option>
-                    <option>Autre</option>
-                  </select>
-                </div>
-                <div className="form-item">
-                  <label>Type de congé</label>
-                  <select>
-                    <option>Congé annuel</option>
-                    <option>Maladie</option>
-                    <option>Congé exceptionnel</option>
-                  </select>
-                </div>
-                <div className="form-item">
-                  <label>Date début</label>
-                  <input type="date" />
-                </div>
-                <div className="form-item">
-                  <label>Date fin</label>
-                  <input type="date" />
-                </div>
-                <div className="form-item">
-                  <label>Commentaire</label>
-                  <textarea rows={3} placeholder="Optionnel"></textarea>
-                </div>
+            <form className="popup-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="form-group">
+                <label>Nom</label>
+                <input type="text" placeholder="Nom complet" required />
               </div>
-              <div className="popup-actions">
-                <button type="submit" className="btn btn-success">✅ Enregistrer</button>
-                <button type="button" className="btn btn-danger" onClick={() => setShowPopup(false)}>❌ Annuler</button>
+              <div className="form-group">
+                <label>Fonction</label>
+                <input type="text" placeholder="Fonction" required />
+              </div>
+              <div className="form-group">
+                <label>Type de congé</label>
+                <input type="text" placeholder="Type de congé" required />
+              </div>
+              <div className="form-group">
+                <label>Date début</label>
+                <input type="date" required />
+              </div>
+              <div className="form-group">
+                <label>Date fin</label>
+                <input type="date" required />
+              </div>
+              <div className="form-group">
+                <label>Statut</label>
+                <select required>
+                  <option value="Approuvé">Approuvé</option>
+                  <option value="En attente">En attente</option>
+                  <option value="Refusé">Refusé</option>
+                </select>
+              </div>
+              <div className="form-actions">
+                <button type="button" className="btn-add">✅ Ajouter</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+            {/* Popup Modifier */}
+      {showEditPopup && selectedDemande && (
+        <div className="popup-overlay" onClick={closeAll}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <div className="popup-header">
+              <h2>Modifier une demande</h2>
+              <button className="close-btn" onClick={closeAll}>✖</button>
+            </div>
+            <form className="popup-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="form-group">
+                <label>Nom</label>
+                <input type="text" defaultValue={selectedDemande.nom} />
+              </div>
+              <div className="form-group">
+                <label>Fonction</label>
+                <input type="text" defaultValue={selectedDemande.fonction} />
+              </div>
+              <div className="form-group">
+                <label>Type de congé</label>
+                <input type="text" defaultValue={selectedDemande.type} />
+              </div>
+              <div className="form-group">
+                <label>Date début</label>
+                <input type="date" defaultValue={selectedDemande.debut} />
+              </div>
+              <div className="form-group">
+                <label>Date fin</label>
+                <input type="date" defaultValue={selectedDemande.fin} />
+              </div>
+              <div className="form-group">
+                <label>Statut</label>
+                <select defaultValue={selectedDemande.statut}>
+                  <option value="Approuvé">Approuvé</option>
+                  <option value="En attente">En attente</option>
+                  <option value="Refusé">Refusé</option>
+                </select>
+              </div>
+              <div className="form-actions">
+                <button type="button" className="btn-add">💾 Enregistrer</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Popup Supprimer */}
+      {showDeletePopup && selectedDemande && (
+        <div className="popup-overlay" onClick={closeAll}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <div className="popup-header">
+              <h2>Supprimer une demande</h2>
+              <button className="close-btn" onClick={closeAll}>✖</button>
+            </div>
+            <div className="confirm-content">
+              <p>Voulez-vous vraiment supprimer cette demande ? (Action inactive pour l’instant)</p>
+              <ul>
+                <li><strong>Nom :</strong> {selectedDemande.nom}</li>
+                <li><strong>Fonction :</strong> {selectedDemande.fonction}</li>
+                <li><strong>Type :</strong> {selectedDemande.type}</li>
+                <li><strong>Début :</strong> {selectedDemande.debut}</li>
+                <li><strong>Fin :</strong> {selectedDemande.fin}</li>
+                <li><strong>Statut :</strong> {selectedDemande.statut}</li>
+              </ul>
+              <div className="form-actions">
+                <button type="button" className="btn-delete">🗑️ Supprimer</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
+              </div>
+            </div>
           </div>
         </div>
       )}

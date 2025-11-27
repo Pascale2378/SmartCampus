@@ -1,14 +1,20 @@
+
 import { useState } from "react";
 import "../../../styles/page.css";
 import "../../../styles/personnel-liste.css";
 
 export default function PersonnelListe() {
-  const [showPopup, setShowPopup] = useState(false);
+  const [showAddPopup, setShowAddPopup] = useState(false);
+  const [showEditPopup, setShowEditPopup] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [selectedPersonnel, setSelectedPersonnel] = useState(null);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [filterFunction, setFilterFunction] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 6;
 
+  // Liste figée (statique)
   const personnel = [
     { nom: "Jean Dupont", fonction: "Professeur", contact: "jean@campus.cm", date: "20/11/2025" },
     { nom: "Marie Claire", fonction: "Secrétaire", contact: "marie@campus.cm", date: "18/11/2025" },
@@ -21,15 +27,16 @@ export default function PersonnelListe() {
     { nom: "Hervé Nchout", fonction: "Comptable", contact: "herve@campus.cm", date: "04/11/2025" },
     { nom: "Nadia Olinga", fonction: "Professeur", contact: "nadia@campus.cm", date: "03/11/2025" },
     { nom: "Marc Ewane", fonction: "Professeur", contact: "marc@campus.cm", date: "02/11/2025" },
-    // ajoute davantage pour tester au besoin
   ];
 
+  // Filtrage
   const filtered = personnel.filter(
     (p) =>
       p.nom.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (filterFunction === "" || p.fonction === filterFunction)
   );
 
+  // Pagination
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
   const start = (currentPage - 1) * itemsPerPage;
   const pageItems = filtered.slice(start, start + itemsPerPage);
@@ -38,6 +45,12 @@ export default function PersonnelListe() {
   const goNext = () => setCurrentPage((p) => Math.min(totalPages, p + 1));
   const goTo = (n) => setCurrentPage(n);
 
+  // Ouvrir/Fermer popups
+  const openAdd = () => setShowAddPopup(true);
+  const openEdit = (p) => { setSelectedPersonnel(p); setShowEditPopup(true); };
+  const openDelete = (p) => { setSelectedPersonnel(p); setShowDeletePopup(true); };
+  const closeAll = () => { setShowAddPopup(false); setShowEditPopup(false); setShowDeletePopup(false); setSelectedPersonnel(null); };
+
   return (
     <div className="page-container personnel-liste-container">
       <div className="page-header">
@@ -45,7 +58,7 @@ export default function PersonnelListe() {
         <p className="page-subtitle">Recherche, filtre et gestion des membres</p>
       </div>
 
-      {/* Barre de recherche plein largeur */}
+      {/* Barre de recherche */}
       <div className="toolbar">
         <input
           className="search-input"
@@ -57,12 +70,12 @@ export default function PersonnelListe() {
             setCurrentPage(1);
           }}
         />
-        <button className="btn btn-add-personnel" onClick={() => setShowPopup(true)}>
+        <button className="btn btn-add-personnel" onClick={openAdd}>
           ➕ Ajouter un personnel
         </button>
       </div>
 
-      {/* Filtre sous la barre de recherche, aligné à gauche */}
+      {/* Filtre */}
       <div className="filter-row">
         <label className="filter-label">Filtrer par fonction</label>
         <select
@@ -80,7 +93,7 @@ export default function PersonnelListe() {
         </select>
       </div>
 
-      {/* Tableau pleine largeur/hauteur */}
+      {/* Tableau */}
       <div className="page-content full-table">
         <table className="smart-table smart-table--spacious">
           <thead>
@@ -100,8 +113,8 @@ export default function PersonnelListe() {
                 <td className="cell-left">{p.contact}</td>
                 <td>{p.date}</td>
                 <td className="cell-actions">
-                  <button className="btn btn-success btn-sm">✏️ Modifier</button>
-                  <button className="btn btn-danger btn-sm">🗑️ Supprimer</button>
+                  <button className="btn btn-success btn-sm" onClick={() => openEdit(p)}>✏️ Modifier</button>
+                  <button className="btn btn-danger btn-sm" onClick={() => openDelete(p)}>🗑️ Supprimer</button>
                 </td>
               </tr>
             ))}
@@ -113,64 +126,103 @@ export default function PersonnelListe() {
           </tbody>
         </table>
 
-        {/* Pagination 10 par page */}
-        {totalPages > 1 && (
-          <div className="pagination">
-            <button disabled={currentPage === 1} onClick={goPrev}>⬅️ Précédent</button>
-            <div className="pages">
-              {Array.from({ length: totalPages }, (_, idx) => {
-                const n = idx + 1;
-                return (
-                  <button
-                    key={n}
-                    className={`page-btn ${currentPage === n ? "active" : ""}`}
-                    onClick={() => goTo(n)}
-                  >
-                    {n}
-                  </button>
-                );
-              })}
-            </div>
-            <button disabled={currentPage === totalPages} onClick={goNext}>Suivant ➡️</button>
-          </div>
-        )}
+        {/* Pagination */}
+        <div className="pagination">
+          <button onClick={goPrev} disabled={currentPage === 1}>Précédent</button>
+          <span>Page {currentPage} / {totalPages}</span>
+          <button onClick={goNext} disabled={currentPage === totalPages}>Suivant</button>
+        </div>
       </div>
 
-      {/* Popup ajout personnel */}
-      {showPopup && (
-        <div className="popup-overlay" onClick={() => setShowPopup(false)}>
+      {/* Popup Ajouter */}
+      {showAddPopup && (
+        <div className="popup-overlay" onClick={closeAll}>
           <div className="popup-content" onClick={(e) => e.stopPropagation()}>
             <div className="popup-header">
               <h2>Ajouter un personnel</h2>
-              <button className="close-btn" onClick={() => setShowPopup(false)}>✖</button>
+              <button className="close-btn" onClick={closeAll}>✖</button>
             </div>
-            <form className="popup-form">
-              <div className="form-row">
-                <label>Nom complet</label>
-                <input type="text" placeholder="Ex: Jean Dupont" />
+            <form className="popup-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="form-group">
+                <label>Nom</label>
+                <input type="text" placeholder="Nom complet" required />
               </div>
-              <div className="form-row">
+              <div className="form-group">
                 <label>Fonction</label>
-                <select>
-                  <option>Professeur</option>
-                  <option>Secrétaire</option>
-                  <option>Comptable</option>
-                  <option>Autre</option>
-                </select>
+                <input type="text" placeholder="Fonction" required />
               </div>
-              <div className="form-row">
+              <div className="form-group">
                 <label>Contact</label>
-                <input type="email" placeholder="Email ou téléphone" />
+                <input type="email" placeholder="Email" required />
               </div>
-              <div className="form-row">
+              <div className="form-group">
                 <label>Date d'inscription</label>
-                <input type="date" />
+                <input type="date" required />
               </div>
-              <div className="popup-actions">
-                <button type="submit" className="btn btn-success">✅ Enregistrer</button>
-                <button type="button" className="btn btn-danger" onClick={() => setShowPopup(false)}>❌ Annuler</button>
+              <div className="form-actions">
+                <button type="button" className="btn-add">✅ Ajouter</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Popup Modifier */}
+      {showEditPopup && selectedPersonnel && (
+        <div className="popup-overlay" onClick={closeAll}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <div className="popup-header">
+              <h2>Modifier un personnel</h2>
+              <button className="close-btn" onClick={closeAll}>✖</button>
+            </div>
+            <form className="popup-form" onSubmit={(e) => e.preventDefault()}>
+                            <div className="form-group">
+                <label>Nom</label>
+                <input type="text" defaultValue={selectedPersonnel.nom} />
+              </div>
+              <div className="form-group">
+                <label>Fonction</label>
+                <input type="text" defaultValue={selectedPersonnel.fonction} />
+              </div>
+              <div className="form-group">
+                <label>Contact</label>
+                <input type="email" defaultValue={selectedPersonnel.contact} />
+              </div>
+              <div className="form-group">
+                <label>Date d'inscription</label>
+                <input type="text" defaultValue={selectedPersonnel.date} />
+              </div>
+              <div className="form-actions">
+                <button type="button" className="btn-add">💾 Enregistrer</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Popup Supprimer */}
+      {showDeletePopup && selectedPersonnel && (
+        <div className="popup-overlay" onClick={closeAll}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <div className="popup-header">
+              <h2>Supprimer un personnel</h2>
+              <button className="close-btn" onClick={closeAll}>✖</button>
+            </div>
+            <div className="confirm-content">
+              <p>Voulez-vous vraiment supprimer ce membre du personnel ? (Action inactive pour l’instant)</p>
+              <ul>
+                <li><strong>Nom :</strong> {selectedPersonnel.nom}</li>
+                <li><strong>Fonction :</strong> {selectedPersonnel.fonction}</li>
+                <li><strong>Contact :</strong> {selectedPersonnel.contact}</li>
+                <li><strong>Date :</strong> {selectedPersonnel.date}</li>
+              </ul>
+              <div className="form-actions">
+                <button type="button" className="btn-delete">🗑️ Supprimer</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
+              </div>
+            </div>
           </div>
         </div>
       )}

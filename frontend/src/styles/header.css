@@ -1,52 +1,59 @@
 .header {
-  height: 65px;
-  width: 1600px;
-  margin-left: 260px;
-  background: #ffffff;
-  border-bottom: 1px solid #e1e1e1;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 25px;
   position: fixed;
-  top: 0;
-  z-index: 5;
+  width: 85%; 
+  justify-content: space-between;
+  margin-left: 260px;
+  align-items: center;
+  background: #ffffff; /* violet élégant */
+  color: #333232;
+  padding: 12px ;
 }
 
 .header-title {
   font-size: 20px;
-  font-weight: 600;
-  color: #333;
+  font-weight: 700;
 }
 
-/* Right section */
 .header-right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 18px;
+  margin-left: 20px; /* ✅ ajoute un espace à gauche du bloc */
 }
 
-/* Search box */
-.search-input {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+.icon-btn {
+  background: none;
+  border: none;
+  color: #792c6e;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+  margin-left: 10px; /* ✅ espace entre chaque icône */
 }
 
-/* Admin profile */
+.icon-btn:hover {
+  transform: scale(1.2);
+  color: #3f1841; /* jaune doré au survol */
+}
+
 .admin-profile {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.admin-avatar {
-  width: 30px;
-  height: 40px;
-  border-radius: 50%;
+  gap: 8px;
+  margin-left: 15px; /* ✅ espace avant le profil */
 }
 
 .admin-name {
-  font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
+}
+
+.admin-avatar-icon {
+  font-size: 32px;
+  color: #b94fc7;
+  transition: color 0.2s ease;
+}
+
+.admin-avatar-icon:hover {
+  color: #5b1172; /* turquoise au survol */
 }

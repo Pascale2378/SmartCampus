@@ -1,13 +1,19 @@
+
 import { useState } from "react";
 import "../../../styles/page.css";
 import "../../../styles/inventaires-demandes.css";
 
 export default function InventairesDemandes() {
-  const [showPopup, setShowPopup] = useState(false);
+  const [showAddPopup, setShowAddPopup] = useState(false);
+  const [showEditPopup, setShowEditPopup] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [selectedDemande, setSelectedDemande] = useState(null);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 6;
 
+  // Liste figée (statique)
   const demandes = [
     { reference: "REQ-001", article: "Ordinateur Dell", typeMvt: "Sortie", depart: "Magasin central", arrivee: "Salle Info A", quantite: 2, statut: "En attente" },
     { reference: "REQ-002", article: "Projecteur Epson", typeMvt: "Sortie", depart: "Magasin A/V", arrivee: "Amphi 2", quantite: 1, statut: "Approuvée" },
@@ -22,6 +28,7 @@ export default function InventairesDemandes() {
     { reference: "REQ-011", article: "Câble HDMI", typeMvt: "Sortie", depart: "Magasin A/V", arrivee: "Amphi 1", quantite: 5, statut: "Approuvée" },
   ];
 
+  // Filtrage
   const filtered = demandes.filter(
     (d) =>
       d.article.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -30,6 +37,7 @@ export default function InventairesDemandes() {
       d.arrivee.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Pagination
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
   const start = (currentPage - 1) * itemsPerPage;
   const pageItems = filtered.slice(start, start + itemsPerPage);
@@ -38,6 +46,12 @@ export default function InventairesDemandes() {
   const goNext = () => setCurrentPage((p) => Math.min(totalPages, p + 1));
   const goTo = (n) => setCurrentPage(n);
 
+  // Ouvrir/Fermer popups
+  const openAdd = () => setShowAddPopup(true);
+  const openEdit = (d) => { setSelectedDemande(d); setShowEditPopup(true); };
+  const openDelete = (d) => { setSelectedDemande(d); setShowDeletePopup(true); };
+  const closeAll = () => { setShowAddPopup(false); setShowEditPopup(false); setShowDeletePopup(false); setSelectedDemande(null); };
+
   return (
     <div className="page-container inventaires-demandes-container">
       <div className="page-header">
@@ -45,7 +59,7 @@ export default function InventairesDemandes() {
         <p className="page-subtitle">Recherche, suivi des mouvements et gestion des demandes</p>
       </div>
 
-      {/* Barre de recherche full width + bouton à droite */}
+      {/* Barre de recherche */}
       <div className="toolbar">
         <input
           className="search-input"
@@ -57,12 +71,12 @@ export default function InventairesDemandes() {
             setCurrentPage(1);
           }}
         />
-        <button className="btn btn-add-request" onClick={() => setShowPopup(true)}>
+        <button className="btn btn-add-request" onClick={openAdd}>
           ➕ Nouvelle demande
         </button>
       </div>
 
-      {/* Tableau pleine largeur/hauteur */}
+      {/* Tableau */}
       <div className="page-content full-table">
         <table className="smart-table smart-table--spacious">
           <thead>
@@ -96,8 +110,8 @@ export default function InventairesDemandes() {
                   {d.statut === "Refusée" && <span className="badge badge-danger">Refusée</span>}
                 </td>
                 <td className="cell-actions">
-                  <button className="btn btn-success btn-sm">✏️ Modifier</button>
-                  <button className="btn btn-danger btn-sm">🗑️ Supprimer</button>
+                  <button className="btn btn-success btn-sm" onClick={() => openEdit(d)}>✏️ Modifier</button>
+                  <button className="btn btn-danger btn-sm" onClick={() => openDelete(d)}>🗑️ Supprimer</button>
                 </td>
               </tr>
             ))}
@@ -109,7 +123,7 @@ export default function InventairesDemandes() {
           </tbody>
         </table>
 
-        {/* Pagination 10 par page */}
+        {/* Pagination */}
         {totalPages > 1 && (
           <div className="pagination">
             <button disabled={currentPage === 1} onClick={goPrev}>⬅️ Précédent</button>
@@ -132,62 +146,134 @@ export default function InventairesDemandes() {
         )}
       </div>
 
-      {/* Popup pro: création d’une demande */}
-      {showPopup && (
-        <div className="popup-overlay" onClick={() => setShowPopup(false)}>
-          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-            <div className="popup-header">
-              <h2>Nouvelle demande d’article</h2>
-              <button className="close-btn" onClick={() => setShowPopup(false)}>✖</button>
-            </div>
-            <form className="popup-form">
-              <div className="form-grid">
-                <div className="form-item">
-                  <label>Référence</label>
-                  <input type="text" placeholder="Ex: REQ-012" />
-                </div>
-                <div className="form-item">
-                  <label>Article</label>
-                  <input type="text" placeholder="Nom de l’article" />
-                </div>
-                <div className="form-item">
-                  <label>Type de mouvement</label>
-                  <select>
-                    <option>Sortie</option>
-                    <option>Entrée</option>
-                  </select>
-                </div>
-                <div className="form-item">
-                  <label>Départ</label>
-                  <input type="text" placeholder="Ex: Magasin central" />
-                </div>
-                <div className="form-item">
-                  <label>Arrivée</label>
-                  <input type="text" placeholder="Ex: Salle B-1" />
-                </div>
-                <div className="form-item">
-                  <label>Quantité</label>
-                  <input type="number" min="1" placeholder="1" />
-                </div>
-                <div className="form-item">
-                  <label>Statut</label>
-                  <select>
-                    <option>En attente</option>
-                    <option>Approuvée</option>
-                    <option>Reçue</option>
-                    <option>Refusée</option>
-                  </select>
-                </div>
-                <div className="form-item form-item--full">
-                  <label>Commentaires</label>
-                  <textarea rows={3} placeholder="Optionnel"></textarea>
-                </div>
+      {/* Popup Ajouter */}
+      {showAddPopup && (
+        <div className="popup-overlay" onClick={closeAll}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}></div>
+            <form className="popup-form" onSubmit={(e) => e.preventDefault()}>         
+              <div className="form-group">
+                <label>Référence</label>
+                <input type="text" placeholder="Référence" required />
               </div>
-              <div className="popup-actions">
-                <button type="submit" className="btn btn-success">✅ Enregistrer</button>
-                <button type="button" className="btn btn-danger" onClick={() => setShowPopup(false)}>❌ Annuler</button>
+              <div className="form-group">
+                <label>Article</label>
+                <input type="text" placeholder="Nom de l'article" required />
+              </div>
+              <div className="form-group">
+                <label>Type de mouvement</label>
+                <select required>
+                  <option value="Sortie">Sortie</option>
+                  <option value="Entrée">Entrée</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Départ</label>
+                <input type="text" placeholder="Lieu de départ" required />
+              </div>
+              <div className="form-group">
+                <label>Arrivée</label>
+                <input type="text" placeholder="Lieu d'arrivée" required />
+              </div>
+              <div className="form-group">
+                <label>Quantité</label>
+                <input type="number" placeholder="Quantité" required />
+              </div>
+              <div className="form-group">
+                <label>Statut</label>
+                <select required>
+                  <option value="En attente">En attente</option>
+                  <option value="Approuvée">Approuvée</option>
+                  <option value="Reçue">Reçue</option>
+                  <option value="Refusée">Refusée</option>
+                </select>
+              </div>
+              <div className="form-actions">
+                <button type="button" className="btn-add">✅ Ajouter</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
               </div>
             </form>
+          </div>
+        
+      )}
+
+      {/* Popup Modifier */}
+      {showEditPopup && selectedDemande && (
+        <div className="popup-overlay" onClick={closeAll}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <div className="popup-header">
+              <h2>Modifier une demande</h2>
+              <button className="close-btn" onClick={closeAll}>✖</button>
+            </div>
+            <form className="popup-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="form-group">
+                <label>Référence</label>
+                <input type="text" defaultValue={selectedDemande.reference} />
+              </div>
+              <div className="form-group">
+                <label>Article</label>
+                <input type="text" defaultValue={selectedDemande.article} />
+              </div>
+              <div className="form-group">
+                <label>Type de mouvement</label>
+                <select defaultValue={selectedDemande.typeMvt}>
+                  <option value="Sortie">Sortie</option>
+                  <option value="Entrée">Entrée</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Départ</label>
+                <input type="text" defaultValue={selectedDemande.depart} />
+              </div>
+              <div className="form-group">
+                <label>Arrivée</label>
+                <input type="text" defaultValue={selectedDemande.arrivee} />
+              </div>
+              <div className="form-group">
+                <label>Quantité</label>
+                <input type="number" defaultValue={selectedDemande.quantite} />
+              </div>
+              <div className="form-group">
+                <label>Statut</label>
+                <select defaultValue={selectedDemande.statut}>
+                  <option value="En attente">En attente</option>
+                  <option value="Approuvée">Approuvée</option>
+                  <option value="Reçue">Reçue</option>
+                  <option value="Refusée">Refusée</option>
+                </select>
+              </div>
+              <div className="form-actions">
+                <button type="button" className="btn-add">💾 Enregistrer</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Popup Supprimer */}
+      {showDeletePopup && selectedDemande && (
+        <div className="popup-overlay" onClick={closeAll}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <div className="popup-header">
+              <h2>Supprimer une demande</h2>
+              <button className="close-btn" onClick={closeAll}>✖</button>
+            </div>
+            <div className="confirm-content">
+              <p>Voulez-vous vraiment supprimer cette demande ? (Action inactive pour l’instant)</p>
+              <ul>
+                <li><strong>Référence :</strong> {selectedDemande.reference}</li>
+                <li><strong>Article :</strong> {selectedDemande.article}</li>
+                <li><strong>Type :</strong> {selectedDemande.typeMvt}</li>
+                <li><strong>Départ :</strong> {selectedDemande.depart}</li>
+                <li><strong>Arrivée :</strong> {selectedDemande.arrivee}</li>
+                <li><strong>Quantité :</strong> {selectedDemande.quantite}</li>
+                <li><strong>Statut :</strong> {selectedDemande.statut}</li>
+              </ul>
+              <div className="form-actions">
+                <button type="button" className="btn-delete">🗑️ Supprimer</button>
+                <button type="button" className="btn-cancel" onClick={closeAll}>❌ Annuler</button>
+              </div>
+            </div>
           </div>
         </div>
       )}

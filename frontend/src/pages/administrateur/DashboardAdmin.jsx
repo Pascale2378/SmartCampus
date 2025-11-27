@@ -1,5 +1,6 @@
 import React from "react";
 import { FaUserGraduate, FaChalkboardTeacher, FaUsers, FaBoxOpen, FaChartBar, FaBell } from "react-icons/fa";
+
 import "../../styles/dashboardAdmin.css";
 
 export default function DashboardAdmin() {

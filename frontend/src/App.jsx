@@ -14,6 +14,7 @@ import PedagogieEmplois from "./pages/administrateur/pedagogie/Emplois";
 import InventairesListe from "./pages/administrateur/inventaires/Liste";
 import InventairesDemandes from "./pages/administrateur/inventaires/Demandes";
 import FinancePaiements from "./pages/administrateur/finance/Paiements";
+import FinancePaie from "./pages/administrateur/finance/Paie";
 import FinanceRecus from "./pages/administrateur/finance/Recus";
 import FinanceAlertes from "./pages/administrateur/finance/Alertes";
 import SystemeParametres from "./pages/administrateur/systeme/Parametres";
@@ -24,10 +25,12 @@ import CommunicationAnnonces from "./pages/administrateur/communication/Annonces
 import CommunicationHistorique from "./pages/administrateur/communication/Historique";
 import CommunicationPreferences from "./pages/administrateur/communication/Preferences";
 import Logout from "./pages/administrateur/Deconnexion";
+import Login from "./pages/Login";
 
 function App() {
   return (
     <div className="app-layout">
+      
       <Sidebar />
       <div className="main-content">
         <Header />
@@ -35,6 +38,7 @@ function App() {
           <Routes>
             <Route path="/" element={<DashboardAdmin />} />
             <Route path="/etudiants" element={<Etudiants />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/formateurs" element={<Formateurs />} />
 
             {/* Personnel */}
@@ -51,6 +55,7 @@ function App() {
 
             {/* Finance */}
             <Route path="/finance/paiements" element={<FinancePaiements />} />
+            <Route path="/finance/paie" element={<FinancePaie />} />
             <Route path="/finance/recus" element={<FinanceRecus />} />
             <Route path="/finance/alertes" element={<FinanceAlertes />} />
 

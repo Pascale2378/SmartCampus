@@ -11,7 +11,7 @@ export default function PedagogieFormations() {
 
   const [searchCourse, setSearchCourse] = useState("");
   const [coursePage, setCoursePage] = useState(1);
-  const coursesPerPage = 5;
+  const coursesPerPage = 10;
 
   const formations = [
     { id: 1, titre: "Licence Informatique", duree: "3 ans", responsable: "Dr. Nguema", cours: ["Programmation Web", "Bases de données", "Algorithmes", "Systèmes d’exploitation", "Réseaux informatiques", "Intelligence artificielle"] },
@@ -26,6 +26,7 @@ export default function PedagogieFormations() {
     { id: 10, titre: "Licence Chimie", duree: "3 ans", responsable: "Dr. Olinga", cours: ["Chimie organique", "Chimie inorganique", "Biochimie"] },
     { id: 11, titre: "Licence Biologie", duree: "3 ans", responsable: "Dr. Ndongo", cours: ["Biologie cellulaire", "Génétique", "Écologie"] },
     { id: 12, titre: "Master Finance", duree: "2 ans", responsable: "Pr. Kouassi", cours: ["Finance internationale", "Gestion de portefeuille", "Analyse financière"] },
+    
   ];
 
   // Filtrage des formations
@@ -161,19 +162,7 @@ export default function PedagogieFormations() {
               <button className="close-btn" onClick={() => setSelectedFormation(null)}>✖</button>
             </div>
 
-            {/* Barre de recherche */}
-            <div className="toolbar">
-              <input
-                className="search-input"
-                type="text"
-                placeholder="Rechercher un cours…"
-                value={searchCourse}
-                onChange={(e) => {
-                  setSearchCourse(e.target.value);
-                  setCoursePage(1);
-                }}
-              />
-            </div>
+            
 
             {/* Liste des cours */}
             <ul className="courses-list">

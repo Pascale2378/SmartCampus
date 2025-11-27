@@ -1,4 +1,5 @@
 import "../styles/header.css";
+import { FaBell, FaCog, FaUserCircle } from "react-icons/fa"; // Icônes FontAwesome
 
 export default function Header() {
   return (
@@ -6,19 +7,20 @@ export default function Header() {
       <h2 className="header-title">Tableau de Bord Administrateur</h2>
 
       <div className="header-right">
-        <input 
-          type="text" 
-          className="search-input" 
-          placeholder="Rechercher..."
-        />
+        {/* Icône notifications */}
+        <button className="icon-btn" title="Notifications">
+          <FaBell />
+        </button>
 
+        {/* Icône paramètres */}
+        <button className="icon-btn" title="Paramètres">
+          <FaCog />
+        </button>
+
+        {/* Profil admin avec icône stylée */}
         <div className="admin-profile">
           <span className="admin-name">Admin</span>
-          <img 
-            src="https://via.placeholder.com/40" 
-            alt="admin avatar" 
-            className="admin-avatar"
-          />
+          <FaUserCircle className="admin-avatar-icon" />
         </div>
       </div>
     </div>
